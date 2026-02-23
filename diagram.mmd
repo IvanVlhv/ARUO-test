@@ -1,0 +1,29 @@
+flowchart LR
+    Internet -->|Allowed IPs only| JumpVM[Windows Jump VM\nPublic IP #1]
+    Internet -->|HTTPS 443| AppGW[Application Gateway\nPublic IP #2]
+
+    subgraph JumpVNET[VNET 2 - Jump]
+      JumpVM
+    end
+
+    subgraph CoreVNET[VNET 1 - Core (private workloads)]
+      AKS[Private AKS subnet]
+      FUNC[Function App subnet]
+      DB[(PostgreSQL Flexible Server subnet)]
+      PE[Private Endpoints subnet\nStorage + Key Vault + Function]
+      AGWSUB[Application Gateway subnet]
+    end
+
+    JumpVM <-- Peering --> CoreVNET
+    AppGW -->|/aks| AKS
+    AppGW -->|/functionap| FUNC
+
+    AKS --> ACR[Azure Container Registry]
+    AKS --> KV[Key Vault]
+    AKS --> SA[Storage Account\nBlob + File]
+    AKS --> LAW[Log Analytics Workspace]
+    JumpVM --> LAW
+    SA --> LAW
+    KV --> LAW
+    DB --> Backup[Automated DB backups]
+    Filesync[Azure File Sync] --> SA

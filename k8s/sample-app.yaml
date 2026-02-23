@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-aks
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hello-aks
+  template:
+    metadata:
+      labels:
+        app: hello-aks
+    spec:
+      containers:
+        - name: web
+          image: mcr.microsoft.com/azuredocs/aks-helloworld:v1
+          ports:
+            - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hello-aks
+spec:
+  type: LoadBalancer
+  selector:
+    app: hello-aks
+  ports:
+    - port: 80
+      targetPort: 80
