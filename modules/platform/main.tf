@@ -369,7 +369,7 @@ resource "azurerm_kubernetes_cluster" "main" {
     node_count           = 1
     vnet_subnet_id       = var.subnet_aks_id
     max_pods             = 30
-    auto_scaling_enabled = false
+#    auto_scaling_enabled = false
   }
 
   linux_profile {
@@ -388,6 +388,8 @@ resource "azurerm_kubernetes_cluster" "main" {
   }
 
   maintenance_window_auto_upgrade {
+    frequency   = "Weekly"
+    interval    = 1
     day_of_week = "Sunday"
     start_time  = "03:00"
     utc_offset  = "+00:00"
