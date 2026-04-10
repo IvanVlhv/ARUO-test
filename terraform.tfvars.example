@@ -1,0 +1,21 @@
+subscription_id         = "00000000-0000-0000-0000-000000000000"
+tenant_id               = "00000000-0000-0000-0000-000000000000"
+location                = "westeurope"
+prefix                  = "aruo"
+suffix                  = "ivan01"
+student_email           = "student@algebra.hr"
+admin_username          = "azureadmin"
+admin_password          = "ReplaceMe!123456789"
+postgres_admin_username = "pgadmin"
+postgres_admin_password = "ReplaceMe!123456789"
+allowed_jump_source_ips = ["203.0.113.10/32"]
+
+# Smallest available sizes differ by subscription and region.
+# If B2ats_v2 is unavailable, change aks_node_vm_size to another supported size.
+aks_node_vm_size = "Standard_B2ats_v2"
+jump_vm_size     = "Standard_B1s"
+
+# Optional extra tags
+# tags = {
+#   environment = "student"
+# }

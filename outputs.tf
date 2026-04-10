@@ -2,26 +2,38 @@ output "resource_group_name" {
   value = azurerm_resource_group.main.name
 }
 
-output "jump_vm_public_ip" {
-  value = module.network.jump_public_ip
+output "jump_public_ip" {
+  value = azurerm_public_ip.jump.ip_address
 }
 
-output "app_gateway_public_ip" {
-  value = module.network.appgw_public_ip
+output "application_gateway_public_ip" {
+  value = azurerm_public_ip.appgw.ip_address
 }
 
 output "aks_name" {
-  value = module.platform.aks_name
+  value = azurerm_kubernetes_cluster.main.name
 }
 
-output "function_hostname" {
-  value = module.platform.function_hostname
+output "aks_oidc_issuer_url" {
+  value = azurerm_kubernetes_cluster.main.oidc_issuer_url
+}
+
+output "acr_login_server" {
+  value = azurerm_container_registry.main.login_server
+}
+
+output "storage_account_name" {
+  value = azurerm_storage_account.main.name
+}
+
+output "key_vault_name" {
+  value = azurerm_key_vault.main.name
 }
 
 output "postgres_fqdn" {
-  value = module.platform.postgres_fqdn
+  value = azurerm_postgresql_flexible_server.main.fqdn
 }
 
-output "workload_identity_client_id" {
-  value = module.platform.workload_identity_client_id
+output "function_default_hostname" {
+  value = azurerm_linux_function_app.main.default_hostname
 }

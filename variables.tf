@@ -1,78 +1,93 @@
-variable "prefix" {
-  description = "Project prefix used for naming resources."
+variable "subscription_id" {
   type        = string
-  default     = "algproj"
+  description = "Azure subscription ID. Required by azurerm provider v4+."
+}
+
+variable "tenant_id" {
+  type        = string
+  description = "Microsoft Entra tenant ID."
 }
 
 variable "location" {
-  description = "Primary Azure region (Europe only)."
   type        = string
+  description = "Azure region."
   default     = "westeurope"
 }
 
-variable "student_email" {
-  description = "Student e-mail tag value."
+variable "prefix" {
   type        = string
+  description = "Short project prefix."
+  default     = "aruo"
+}
+
+variable "suffix" {
+  type        = string
+  description = "Unique suffix for globally unique names. Use lowercase letters and numbers only."
+}
+
+variable "student_email" {
+  type        = string
+  description = "Student email used for tags and optional AAD admin assignment."
   default     = "student@algebra.hr"
 }
 
 variable "allowed_jump_source_ips" {
-  description = "CIDR list allowed to RDP to jump VM."
   type        = list(string)
+  description = "CIDR list allowed to access the jump VM over RDP."
 }
 
 variable "admin_username" {
   type        = string
+  description = "Jump VM local admin username."
   default     = "azureadmin"
 }
 
 variable "admin_password" {
-  description = "Windows VM administrator password."
   type        = string
+  description = "Jump VM local admin password."
   sensitive   = true
 }
 
-variable "postgres_admin_login" {
-  type    = string
-  default = "pgadmin"
+variable "postgres_admin_username" {
+  type        = string
+  description = "PostgreSQL Flexible Server admin username."
+  default     = "pgadmin"
 }
 
 variable "postgres_admin_password" {
-  type      = string
-  sensitive = true
-}
-
-variable "tenant_id" {
-  type = string
-}
-
-variable "subscription_id" {
-  type = string
-}
-
-variable "jump_vnet_cidr" {
-  type    = string
-  default = "10.50.0.0/16"
-}
-
-variable "core_vnet_cidr" {
-  type    = string
-  default = "10.10.0.0/16"
-}
-
-variable "ssh_public_key" {
-  description = "SSH key for AKS Linux profile."
   type        = string
+  description = "PostgreSQL Flexible Server admin password."
+  sensitive   = true
 }
 
-variable "function_package_url" {
-  description = "Optional ZIP deployment package URL for sample function app code."
+variable "jump_vm_size" {
   type        = string
-  default     = ""
+  default     = "Standard_B1s"
 }
 
-variable "filesync_registered_server_id" {
-  description = "Registered server ID for Azure File Sync server endpoint (optional)."
+variable "aks_node_vm_size" {
   type        = string
-  default     = ""
+  default     = "Standard_B2ats_v2"
+}
+
+variable "aks_node_count" {
+  type        = number
+  default     = 1
+}
+
+variable "function_app_sku_name" {
+  type        = string
+  description = "App Service plan SKU for Function App. Premium is used to support private networking better than Consumption."
+  default     = "EP1"
+}
+
+variable "acr_sku" {
+  type        = string
+  default     = "Standard"
+}
+
+variable "tags" {
+  type        = map(string)
+  description = "Additional custom tags. Mandatory university/student tags are added automatically."
+  default     = {}
 }

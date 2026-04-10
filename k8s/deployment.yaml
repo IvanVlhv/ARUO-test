@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aks-sample
+  namespace: workload
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: aks-sample
+  template:
+    metadata:
+      labels:
+        app: aks-sample
+        azure.workload.identity/use: "true"
+    spec:
+      serviceAccountName: app-sa
+      containers:
+        - name: web
+          image: REPLACE_WITH_ACR_LOGIN_SERVER/aks-sample:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          env:
+            - name: STORAGE_ACCOUNT_NAME
+              value: REPLACE_WITH_STORAGE_ACCOUNT_NAME
+            - name: STORAGE_CONTAINER_NAME
+              value: appdata
+            - name: KEY_VAULT_NAME
+              value: REPLACE_WITH_KEY_VAULT_NAME
+            - name: KEY_VAULT_SECRET_NAME
+              value: postgres-admin-password
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: aks-sample
+  namespace: workload
+spec:
+  selector:
+    app: aks-sample
+  ports:
+    - port: 80
+      targetPort: 8080
+      protocol: TCP

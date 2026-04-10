@@ -1,0 +1,30 @@
+// VM CPU usage
+InsightsMetrics
+| where TimeGenerated > ago(24h)
+| where Name == "UtilizationPercentage"
+| summarize AvgCPU = avg(Val) by bin(TimeGenerated, 5m), Computer
+| render timechart
+
+// Windows security events from Jump VM
+Event
+| where TimeGenerated > ago(24h)
+| where EventLog == "Security"
+| summarize Count = count() by Computer, bin(TimeGenerated, 15m)
+| render timechart
+
+// AKS container logs
+ContainerLogV2
+| where TimeGenerated > ago(24h)
+| summarize Count = count() by ContainerName, bin(TimeGenerated, 15m)
+| render timechart
+
+// Key Vault access
+AzureDiagnostics
+| where TimeGenerated > ago(24h)
+| where ResourceType == "VAULTS"
+| summarize Count = count() by OperationName, ResultType, bin(TimeGenerated, 15m)
+
+// Storage access
+StorageBlobLogs
+| where TimeGenerated > ago(24h)
+| summarize Count = count() by OperationName, StatusText, bin(TimeGenerated, 15m)
